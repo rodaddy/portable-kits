@@ -101,10 +101,10 @@ installs Bun to use it.
 
 ### Changed
 
-- **Every deterministic script runs under plain `node`.** Rico ruling
-  2026-08-13: kits must never require Bun of a buyer ("Bun is on its way out and
-  dying"). The scripts stay TypeScript; Node executes them directly with no
-  build step, no bundler, and no `npm install`.
+- **Every deterministic script runs under plain `node`.** Design rule
+  from 2026-08-13: kits must never require Bun of a buyer. The scripts stay
+  TypeScript; Node executes them directly with no build step, no bundler,
+  and no `npm install`.
 - **Ported the three Bun-specific things:** `import.meta.dir` ->
   `import.meta.dirname`; relative imports now carry explicit `.ts` extensions,
   which Node ESM requires; `bun:test` / `Bun.spawn` -> `node --test` with
@@ -122,7 +122,7 @@ installs Bun to use it.
   so every buyer received a Bun lockfile pinning `@types/bun` and `bun-types`
   for a kit that no longer uses Bun. Nothing referenced it — not `kit.json`
   `verification.files`, not the integrity manifest, not any script — so it was
-  orphaned Bun tooling state contradicting the ruling on the buyer's disk.
+  orphaned Bun tooling state contradicting that rule on the buyer's disk.
 
 ### Fixed
 

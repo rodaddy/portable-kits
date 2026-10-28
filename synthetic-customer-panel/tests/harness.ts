@@ -1,6 +1,6 @@
 // Test harness shim: the kit's tests run on plain Node with no test-framework
 // dependency, because a buyer must be able to verify this kit with nothing but
-// Node installed. Authority: Rico ruling 2026-08-13 - kits never require Bun.
+// Node installed. Design rule (2026-08-13): kits never require Bun.
 //
 // `node:test` supplies describe/test/before/after; it does NOT supply a
 // Jest-style `expect`, so the five matchers these tests actually use are
