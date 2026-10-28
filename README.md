@@ -1,91 +1,114 @@
 # Portable Kits
 
-The packaging contract, validator and reference kit for self-contained AI kits
-that a person can unzip, hand to an AI agent, and install by saying "Read
+A packaging contract, validator and reference kit for AI kits that a person
+can unzip, hand to an AI agent, and install with one sentence: "Read
 `INSTALL.md` and install this kit."
 
-> Portfolio piece. Source shown for review only; not licensed for use. See LICENSE.
+![Licence: PolyForm Noncommercial 1.0.0](https://img.shields.io/badge/licence-PolyForm%20Noncommercial%201.0.0-blue)
+![Language: TypeScript on Node](https://img.shields.io/badge/language-TypeScript%20(Node%2022.18%2B)-3178c6)
 
-## What it does
+![Portable Kits: an AI kit unzipped, checked against its contract and installed by an agent](docs/images/hero.jpg)
 
-This folder defines what an installable AI kit is and enforces it:
+## What it is
 
-- `kit-manifest.schema.json`: the JSON Schema for `kit.json` (identity,
-  requirements, payloads, boundaries, verification).
-- `validate-kit.ts`: checks a kit's manifest contract and every declared
-  package path.
-- `generate-install-integrity.ts`: regenerates a kit's copied-install integrity
-  record after an intentional payload edit.
-- `synthetic-customer-panel/`: the reference kit, a synthetic focus-group panel
-  that tests a marketing artifact against 5-15 researched customer composites.
+The rules and tools that define what an installable AI kit is, plus one kit
+built to those rules:
 
-## The problem
+- `kit-manifest.schema.json`: the JSON Schema for a kit's `kit.json`
+  (identity, runtimes, payloads, boundaries, verification).
+- `validate-kit.ts`: checks a kit's manifest against the schema and checks
+  that every declared path exists and stays inside the kit folder.
+- `generate-install-integrity.ts`: regenerates a kit's installed-payload
+  integrity record after an intentional edit.
+- `synthetic-customer-panel/`: the reference kit, a synthetic focus-group
+  panel that tests a piece of marketing against 5-15 researched customer
+  composites before it goes out.
 
-Handing an AI agent a folder of prompts and scripts and saying "install this"
-usually produces an install nobody can check: the agent improvises file
-operations, silently skips what its environment cannot do, and reports success
-either way. This contract makes the kit declare its desired finished state and
-the agent report, honestly, which mode it actually achieved.
+![validate-kit.ts passing the reference kit and failing two broken copies](docs/images/terminal.png)
+
+*Real runs of `validate-kit.ts`: the reference kit passes, a copy with its
+changelog removed fails, and a copy whose payload points outside the kit
+folder fails the schema. `[exit N]` lines are the shell's exit status.*
+
+## Why it exists
+
+Hand an AI agent a folder of prompts and scripts and say "install this", and
+the result is usually an install nobody can check. The agent improvises file
+operations, quietly skips whatever its environment cannot do, and reports
+success either way. This contract makes the kit declare the finished state it
+wants and makes the agent report, in a fixed format, which install mode it
+actually reached.
 
 ## How it works
 
-Every kit carries `INSTALL.md` (agent-facing instructions), `kit.json` and its
-schema, `README.md`, `VERSION` and `CHANGELOG.md`. The agent owns environment
-detection and tool choice; the kit owns the finished state, declared runtimes,
-safety boundaries and proof of success. The installing agent picks the
-strongest mode it can honestly support (full, persistent files, session only,
-or handoff required) and ends with a fixed-format receipt. The validator and
-the contract test suite keep the reference kit conforming.
+![How a portable kit installs: declare, validate, install in the strongest honest mode, report](docs/images/how-it-works.jpg)
 
-```mermaid
-flowchart LR
-  K[Kit folder] --> V[validate-kit.ts against kit-manifest.schema.json]
-  K --> A[AI agent reads INSTALL.md]
-  A --> M{Strongest honest mode}
-  M --> R[KIT_INSTALL_RECEIPT: status, mode, runtimes, verification]
-```
+Every kit carries `INSTALL.md` (instructions written for the agent),
+`kit.json` and its schema, `README.md`, `VERSION` and `CHANGELOG.md`. The kit
+owns the finished state, the declared runtimes, the safety boundaries and the
+proof of success. The agent owns environment detection and tool choice. It
+picks the strongest mode it can honestly support (full, persistent files,
+session only, or handoff required) and ends with a `KIT_INSTALL_RECEIPT`
+stating status, mode, runtimes and verification. `validate-kit.ts` and the
+contract test suite keep kits conforming before they ship.
 
 ## Features
 
 - **Declared, inspectable installs.** Every payload, destination, external
-  write, preserved path and forbidden location is declared in `kit.json`; no
-  hidden download-and-execute steps; unrelated collisions are never
-  overwritten.
-- **Honest install modes.** An agent may never report a full install after
+  write, preserved path and forbidden location is declared in `kit.json`.
+  No hidden download-and-run steps, and unrelated files at the destination are
+  never overwritten.
+- **Honest install modes.** An agent may not report a full install after
   completing a weaker one.
-- **Runtime policy.** TypeScript runs directly on Node 22.6+; Python, where a
-  kit uses it, runs through `uv`. Only declared runtimes are checked, and
-  machine-level installs need the operator's permission.
-- **Reference panel kit.** Evidence-labeled dossiers per seat, independent seat
-  runs, synthesis that keeps dissent, owner-weighted scoring, three tested
-  rewrites, and calibration against later real outcomes.
+- **Path confinement.** Declared paths are resolved through symlinks and must
+  stay inside the kit; every verification command must point at a declared
+  local entrypoint.
+- **Copied-install integrity.** A kit can prove that an installed copy matches
+  its retained source, file by file.
+- **Plain runtimes.** TypeScript runs directly on Node with no build step and
+  no `npm install` for the buyer; Python, where a kit uses it, runs through
+  `uv`.
+- **Reference panel kit.** Evidence-labelled dossiers per seat, independent
+  seat runs, synthesis that keeps dissent, owner-weighted scoring, tested
+  rewrites, calibration against later real outcomes, and a room lifecycle
+  (`room.sh`) that resets a panel without deleting its history.
 
-The panel workflow follows the synthetic focus-group method demonstrated in
-Corey Ganim's interview with Justin Brooke.
+## Run it locally (for review)
 
-## Stack
+Requires Node 22.18 or newer.
 
-TypeScript run directly by Node (no build step), JSON Schema, Markdown skill
-and workflow files, bash for the panel's room lifecycle, `node --test`.
-
-## Status
-
-Experimental. The contract, validator and reference kit are a working proof of
-concept with a contract regression suite; the reference kit has been dogfooded
-internally but not against a paying customer.
-
-## Running it locally (for reviewers)
-
-```text
-npm run check
+```bash
+npm run check                                   # contract tests, then validate the reference kit
+node validate-kit.ts synthetic-customer-panel   # validator only
+cd synthetic-customer-panel && npm test         # the reference kit's own test
 ```
 
-Runs the contract regression suite and validates the reference kit.
+Licence: free for personal and non-commercial use with credit; commercial use
+needs a licence. See `LICENSE` (PolyForm Noncommercial 1.0.0) or write to
+rico@rtech-consulting.com.
 
-## Screenshots
+## How it was built
 
-None.
+The contract started in July 2026 as the base for a line of AI kits and was
+tightened in August as the kits were reviewed, made portable across AI apps,
+and moved off Bun onto plain Node. Dates, decisions and the mistakes that
+shaped it are in [docs/BUILD-STORY.md](docs/BUILD-STORY.md).
+
+## Project status
+
+Experimental. The contract, validator and reference kit work and have a
+regression suite. Known gap at this snapshot: 15 of 16 contract tests pass.
+The copied-install test fails because folder README files added on 2026-08-24
+are not yet in the reference kit's integrity record
+(`KIT-METADATA.json`); regenerating it with `npm run generate:integrity` is
+the pending fix. The reference kit has been used internally, not yet with a
+paying customer.
+
+## Credits
+
+The panel workflow follows the synthetic focus-group method shown in Corey
+Ganim's interview with Justin Brooke.
 
 ## Author
 
-Rico Rojas, rico@rtech-consulting.com, https://rico-rojas.com
+Rico Rojas, https://rico-rojas.com

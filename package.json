@@ -7,5 +7,6 @@
     "generate:integrity": "node generate-install-integrity.ts synthetic-customer-panel",
     "test": "node --test \"tests/*.test.ts\"",
     "check": "npm test && node validate-kit.ts synthetic-customer-panel"
-  }
+  },
+  "license": "SEE LICENSE IN LICENSE"
 }

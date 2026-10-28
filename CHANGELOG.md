@@ -9,7 +9,7 @@ follows Keep a Changelog and Semantic Versioning.
 
 - Authoring tools (`validate-kit.ts`, `generate-install-integrity.ts`) and the
   contract suite run under plain `node` instead of Bun, per the 2026-08-13
-  ruling that kits never require Bun. `import.meta.dir` -> `import.meta.dirname`
+  design rule that kits never require Bun. `import.meta.dir` -> `import.meta.dirname`
   and `bun:test` / `Bun.spawn` -> `node --test` with `node:child_process` via a
   dependency-free `tests/harness.ts` shim.
 - Contract fixtures declare a `node` runtime rather than a `bun` one, so the
