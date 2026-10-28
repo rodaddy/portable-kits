@@ -88,7 +88,8 @@ a mechanical trigger.
 ## Current state (2026-10-27)
 
 Contract 0.1.2, reference kit 1.2.3. The validator passes the reference kit
-and the kit's own test passes. 15 of 16 contract tests pass: folder README
-files added on 2026-08-24 were not added to the reference kit's integrity
-record, so the copied-install check reports a file-set mismatch. That is a
-real finding of the integrity check, and the fix is to regenerate the record.
+and the kit's own test passes. The copied-install check once failed because
+folder README files added on 2026-08-24 were missing from the reference kit's
+integrity record. On 2026-10-28 the record was regenerated with
+`npm run generate:integrity` (after fixing its handling of a wrapped digest
+constant) and all 16 contract tests pass.

@@ -5,7 +5,7 @@ import { relative, resolve, sep } from "node:path";
 const KIT_ID = "synthetic-customer-panel";
 const VERSION = "1.2.3";
 const METADATA_SHA256 =
-  "6831e277f8628439f5375a4ce36627f280d149b15220db78d1c5b9ad33b5037b";
+  "8444784426ee6e08f5dddb6b9dc9216a0dc6f6c691e7baffd1f7d3f63201afcd";
 const ROOT = resolve(import.meta.dirname, "..");
 const METADATA_PATH = resolve(ROOT, "KIT-METADATA.json");
 const EXEMPT_FILES = new Set([
