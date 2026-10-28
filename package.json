@@ -1,0 +1,11 @@
+{
+  "name": "rtech-portable-kits-authoring",
+  "version": "0.1.2",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate:integrity": "node generate-install-integrity.ts synthetic-customer-panel",
+    "test": "node --test \"tests/*.test.ts\"",
+    "check": "npm test && node validate-kit.ts synthetic-customer-panel"
+  }
+}
