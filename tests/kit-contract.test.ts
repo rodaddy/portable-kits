@@ -376,7 +376,7 @@ describe("portable kit contract", () => {
     );
     expect(localVerification.code).toBe(0);
     expect(localVerification.stdout).toContain(
-      "PASS synthetic-customer-panel@1.2.1",
+      "PASS synthetic-customer-panel@1.2.3",
     );
 
     const installedSkill = join(destination, "SKILL.md");

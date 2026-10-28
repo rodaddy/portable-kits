@@ -97,12 +97,8 @@ shaped it are in [docs/BUILD-STORY.md](docs/BUILD-STORY.md).
 ## Project status
 
 Experimental. The contract, validator and reference kit work and have a
-regression suite. Known gap at this snapshot: 15 of 16 contract tests pass.
-The copied-install test fails because folder README files added on 2026-08-24
-are not yet in the reference kit's integrity record
-(`KIT-METADATA.json`); regenerating it with `npm run generate:integrity` is
-the pending fix. The reference kit has been used internally, not yet with a
-paying customer.
+regression suite; all 16 contract tests pass. The reference kit has been used
+internally, not yet with a paying customer.
 
 ## Credits
 
